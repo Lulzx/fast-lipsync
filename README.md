@@ -87,15 +87,30 @@ time:
 
 ```mermaid
 flowchart LR
-    subgraph once["once per footage frame (cached)"]
-        F[footage] --> D[InsightFace boxes<br/>+ landmarks] --> E[SD VAE encode<br/>masked + reference crop]
-        D --> M[mouth blend mask]
+    subgraph cached["Once per footage frame, cached"]
+        F["footage"]
+        D["InsightFace boxes and landmarks"]
+        E["SD VAE encode of face crops"]
+        M["mouth blend mask"]
     end
-    subgraph run["every run"]
-        A[voice] --> W[Whisper tiny<br/>features] --> U[MuseTalk UNet<br/>Core ML, batch 8]
-        E --> U --> T[TAESD decode] --> B[colour match,<br/>blend mouth] --> X[ffmpeg<br/>h264_videotoolbox]
-        M --> B
+    subgraph perrun["Every run"]
+        A["voice"]
+        W["Whisper tiny features"]
+        U["MuseTalk UNet on Core ML"]
+        T["TAESD decode"]
+        B["colour match and blend"]
+        X["hardware H.264 encode"]
     end
+    F --> D
+    D --> E
+    D --> M
+    A --> W
+    W --> U
+    E --> U
+    U --> T
+    T --> B
+    M --> B
+    B --> X
 ```
 
 Stock MuseTalk runs face detection, VAE encoding, the UNet, VAE decoding and face parsing on every frame of
