@@ -1,0 +1,20 @@
+# Python 3.11 env for lip-sync on Apple Silicon (see setup.sh)
+torch==2.5.1
+torchvision==0.20.1
+diffusers==0.32.2
+transformers==4.48.0
+accelerate==0.26.1
+einops==0.7.0
+omegaconf==2.3.0
+opencv-python==4.9.0.80
+mediapipe==0.10.14  # hand detection for the real-mouth library
+librosa==0.11.0
+soundfile==0.14.0
+insightface==0.7.3
+onnxruntime==1.21.0
+coremltools==9.0
+numpy==1.26.4
+scipy>=1.16.2  # older wheels fail to load on recent macOS
+huggingface-hub==0.30.2
+peft  # only for tools/finetune.py
+pillow

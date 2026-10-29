@@ -1,0 +1,16 @@
+diff --git a/musetalk/utils/face_parsing/__init__.py b/musetalk/utils/face_parsing/__init__.py
+index 09c1c02..0527dd1 100755
+--- a/musetalk/utils/face_parsing/__init__.py
++++ b/musetalk/utils/face_parsing/__init__.py
+@@ -82,10 +82,7 @@ class FaceParsing():
+         with torch.no_grad():
+             image = image.resize(size, Image.BILINEAR)
+             img = self.preprocess(image)
+-            if torch.cuda.is_available():
+-                img = torch.unsqueeze(img, 0).cuda()
+-            else:
+-                img = torch.unsqueeze(img, 0)
++            img = torch.unsqueeze(img, 0).to(next(self.net.parameters()).device)
+             out = self.net(img)[0]
+             parsing = out.squeeze(0).cpu().numpy().argmax(0)
+             
